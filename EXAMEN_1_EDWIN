@@ -1,0 +1,68 @@
+/*
+Utilizando la base de datos compartida para este examen. 
+
+Escriba una consulta SQL combinando las tablas asesores y clientes, para obtener el numero id y nombre completo de los asesores que no tienen clientes asignados.
+
+Ingrese uno de los numeroid obtenidos en la consulta.
+*/
+ 
+select 
+	a.numeroID, 
+    concat(a.nombres,' ' ,a.apellidos) Nombre_Completo, 
+    a.cantClientes   
+from bd_facts.tbl_asesores a 
+left join bd_facts.tbl_clientes b 
+on a.idAsesor = b.idAsesor 
+where b.idAsesor is null; 
+
+
+/*
+Utilizando la base de datos compartida para este examen. 
+
+Cree una consulta sql para obtener:  
+
+nombre de cliente, 
+idfactura, 
+fecha de emision 
+fecha de vencimiento
+de facturas que están vencidas por falta de pago.
+Ingrese un idcliente de los obtenidos en el resultado de su consulta.
+*/
+
+select 
+	a.nombrecompleto,
+    b.idFactura,
+    b.fechaEmision,
+    b.fechaVencimiento,
+    b.idCliente
+      
+from bd_facts.tbl_clientes a 
+left join bd_facts.tbl_facturas b 
+on a.idCliente = b.idCliente
+ where b.fechaVencimiento between '2022-01-01 22:36:30' and '2022-02-10 04:11:10';
+
+/*
+Cree una transacción que realice lo siguiente:
+
+Asignar un asesor a un cliente, actualizando el campo idasesor en la tabla clientes.
+Actualizar el campo cantclientes en la tabla asesores, según la cantidad de clientes que tenga el asesor.
+Necesita las variables de entrada: idasesor, idcliente.
+Cuando haya terminado de crear la transacción, ejecute el código con los siguientes valores:
+
+Al cliente 101 asigne el asesor 14.
+Al cliente 128 asigne el asesor 1.
+Utilice el cuadro de abajo para pegar el código de la transacción creada por usted. 
+
+(Únicamente el código de la transacción. El código de las consultas, debe estar en su repositorio de github).
+*/
+
+
+ set sql_safe_updates = 0;
+ set @v_idAsesor =1; 
+ set @v_cantidadCliente =3;
+ set @v_idCliente=100;
+ 
+ 	update bd_facts.tbl_clientes
+		set idCliente = @v_idCliente,
+			idAsesor = @v_idAsesor;
+            
