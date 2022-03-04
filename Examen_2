@@ -5,17 +5,21 @@ CREATE PROCEDURE bd_factsv2.sp_registrar_producto(
 in p_idProducto 		int,
 in p_idFactura    		int,
 in p_cantidad 			int
+
 )
 BEGIN
 declare v_idProducto 			int;
 declare v_idFactura 			int;
 declare v_cantidad	 			int;
-
+#declare v_impuestosobreventa  	decimal(12,2);
+#declare v_precioVenta  			decimal(12,2);
 #Asignar variables
-	 set v_idProducto = p_idProducto;
-   	 set v_idFactura = p_idFactura;
-   	 set v_cantidad  = p_cantidad ;
-	    
+	set v_idProducto = p_idProducto;
+    set v_idFactura = p_idFactura;
+    set v_cantidad  = p_cantidad ;
+	#set v_impuestosobreventa  = p_impuestosobreventa ;
+	#set v_precioVenta  		 = p_precioVenta  ;
+          
     if idFactura  = p_idfactura then 
     
     case
@@ -23,10 +27,18 @@ declare v_cantidad	 			int;
     
     update bd_factsv2.tbl_productos_facturados 
 		set v_cantidad = cantidad + 1
-        where idProducto =  v_idProducto;  
-  
+        where idProducto =  v_idProducto;    
                 
         end case; 
       end if;  
+      
+     /* from bd_sample.tbl_productos_facturados a 
+	left join bd_sample.tbl_productos b 
+	on a.id_producto = b.id_producto 
+	where a.id_factura = v_id_factura ;*/
+      
+        select idProducto into  p_idProducto 
+    from  tbl_productos_facturados where idProducto = v_idProducto; 
+    
     	commit;
 END;
